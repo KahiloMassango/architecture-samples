@@ -193,6 +193,22 @@ class TasksViewModelTest {
     }
 
     @Test
+    fun snackbarMessageShownOnlyOnce() = runTest {
+        // When a snackbar message is set
+        tasksViewModel.showEditResultMessage(DELETE_RESULT_OK)
+
+        // The snackbar is updated
+        assertThat(tasksViewModel.uiState.first().userMessage)
+            .isEqualTo(R.string.successfully_deleted_task_message)
+
+        // When the UI has displayed the message
+        tasksViewModel.snackbarMessageShown()
+
+        // The snackbar is cleared
+        assertThat(tasksViewModel.uiState.first().userMessage).isEqualTo(null)
+    }
+
+    @Test
     fun completeTask_dataAndSnackbarUpdated() = runTest {
         // With a repository that has an active task
         val task = Task(id = "id", title = "Title", description = "Description")

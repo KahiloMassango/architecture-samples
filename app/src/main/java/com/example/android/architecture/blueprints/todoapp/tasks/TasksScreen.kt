@@ -44,7 +44,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -66,10 +65,8 @@ import com.example.android.architecture.blueprints.todoapp.util.TasksTopAppBar
 
 @Composable
 fun TasksScreen(
-    @StringRes userMessage: Int,
     onAddTask: () -> Unit,
     onTaskClick: (Task) -> Unit,
-    onUserMessageDisplayed: () -> Unit,
     openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TasksViewModel = hiltViewModel(),
@@ -95,6 +92,7 @@ fun TasksScreen(
         }
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val userMessageResultCode by viewModel.userMessageResultCode.collectAsStateWithLifecycle()
 
         TasksContent(
             loading = uiState.isLoading,
@@ -118,11 +116,9 @@ fun TasksScreen(
         }
 
         // Check if there's a userMessage to show to the user
-        val currentOnUserMessageDisplayed by rememberUpdatedState(onUserMessageDisplayed)
-        LaunchedEffect(userMessage) {
-            if (userMessage != 0) {
-                viewModel.showEditResultMessage(userMessage)
-                currentOnUserMessageDisplayed()
+        LaunchedEffect(userMessageResultCode) {
+            if (userMessageResultCode != 0) {
+                viewModel.showEditResultMessage(userMessageResultCode)
             }
         }
     }
