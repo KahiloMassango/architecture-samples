@@ -29,6 +29,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.example.android.architecture.blueprints.todoapp.HiltTestActivity
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.TodoDestinationsArgs.USER_MESSAGE_ARG
 import com.example.android.architecture.blueprints.todoapp.TodoTheme
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -255,12 +256,14 @@ class TasksScreenTest {
 
     private fun setContent() {
         composeTestRule.setContent {
+            // Creating SavedStateHandle manually since we're not actually in a
+            // NavHost in this test
+            val savedStateHandle = SavedStateHandle.createHandle(null, null)
+            savedStateHandle[USER_MESSAGE_ARG] = R.string.successfully_added_task_message
             TodoTheme {
                 Surface {
                     TasksScreen(
-                        viewModel = TasksViewModel(repository, SavedStateHandle()),
-                        userMessage = R.string.successfully_added_task_message,
-                        onUserMessageDisplayed = { },
+                        viewModel = TasksViewModel(repository, savedStateHandle),
                         onAddTask = { },
                         onTaskClick = { },
                         openDrawer = { }

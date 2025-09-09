@@ -67,11 +67,9 @@ fun TodoNavGraph(
             arguments = listOf(
                 navArgument(USER_MESSAGE_ARG) { type = NavType.IntType; defaultValue = 0 }
             )
-        ) { entry ->
+        ) {
             AppModalDrawer(drawerState, currentRoute, navActions) {
                 TasksScreen(
-                    userMessage = entry.arguments?.getInt(USER_MESSAGE_ARG)!!,
-                    onUserMessageDisplayed = { entry.arguments?.putInt(USER_MESSAGE_ARG, 0) },
                     onAddTask = { navActions.navigateToAddEditTask(R.string.add_task, null) },
                     onTaskClick = { task -> navActions.navigateToTaskDetail(task.id) },
                     openDrawer = { coroutineScope.launch { drawerState.open() } }

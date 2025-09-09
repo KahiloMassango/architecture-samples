@@ -23,6 +23,7 @@ import com.example.android.architecture.blueprints.todoapp.ADD_EDIT_RESULT_OK
 import com.example.android.architecture.blueprints.todoapp.DELETE_RESULT_OK
 import com.example.android.architecture.blueprints.todoapp.EDIT_RESULT_OK
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.TodoDestinationsArgs.USER_MESSAGE_ARG
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.TaskRepository
 import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.ACTIVE_TASKS
@@ -59,6 +60,8 @@ class TasksViewModel @Inject constructor(
     private val taskRepository: TaskRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    var userMessageResultCode = savedStateHandle.getStateFlow(USER_MESSAGE_ARG, 0)
 
     private val _savedFilterType =
         savedStateHandle.getStateFlow(TASKS_FILTER_SAVED_STATE_KEY, ALL_TASKS)
@@ -131,6 +134,7 @@ class TasksViewModel @Inject constructor(
 
     fun snackbarMessageShown() {
         _userMessage.value = null
+        savedStateHandle[USER_MESSAGE_ARG] = 0
     }
 
     private fun showSnackbarMessage(message: Int) {
